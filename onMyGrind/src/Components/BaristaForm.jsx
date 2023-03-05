@@ -19,6 +19,11 @@ const BaristaForm = () => {
     const [currentDrink, setCurrentDrink] = useState("");
     const [trueRecipe, setTrueRecipe] = useState({});
 
+    const [correct_temp, setCheckedTemperature] = useState('');
+    const [correct_syrup, setCheckedSyrup] = useState('');
+    const [correct_milk, setCheckedMilk] = useState('');
+    const [correct_blended, setCheckedBlended] = useState('');
+
     const getNextDrink = () => {
         let randNum = Math.floor(Math.random() * (drinksJson.drinks.length));
 
@@ -26,6 +31,7 @@ const BaristaForm = () => {
         setTrueRecipe(drinksJson.drinks[randNum].ingredients);
     }
     const onNewDrink = () => {
+        //clear inputs
         setInputs({
             'temperature': '',
             'milk': '',
@@ -33,9 +39,33 @@ const BaristaForm = () => {
             'blended': '' 
         });
         getNextDrink();
+
+        //reset other inputs
+        setCheckedTemperature('');
+        setCheckedSyrup('');
+        setCheckedMilk('');
+        setCheckedBlended('');
     }
     const onCheckAnswer = () => {
+        if (trueRecipe.temp != inputs['temperature']){
+            setCheckedTemperature('wrong');
+        }
+        else {
+            setCheckedTemperature("correct");
+        }
 
+        setCheckedSyrup(prevState => {
+            return trueRecipe.syrup != inputs['syrup'] ? 'wrong' : 'correct';
+            //console.log(trueRecipe.syrup)
+        })
+
+        setCheckedMilk(prevState => {
+            return trueRecipe.milk != inputs['milk'] ? 'wrong' : 'correct';
+        })
+
+        setCheckedBlended(prevState => {
+            return trueRecipe.blended != inputs['blended'] ? 'wrong' : 'correct';
+        })
     }
   return (
     <div>
@@ -66,7 +96,7 @@ const BaristaForm = () => {
 
         <div>
             <h3>Temperature</h3>
-            <div className="answer-space" >
+            <div className="answer-space" id={correct_temp}>
                 {inputs["temperature"]} 
             </div>
             <RecipeChoices
@@ -82,7 +112,7 @@ const BaristaForm = () => {
 
         <div>
             <h3>Syrup</h3>
-            <div className="answer-space" >
+            <div className="answer-space" id={correct_syrup}>
                 {inputs["syrup"]} 
             </div>
             <RecipeChoices
@@ -98,7 +128,7 @@ const BaristaForm = () => {
 
         <div>
             <h3>Milk</h3>
-            <div className="answer-space" >
+            <div className="answer-space" id={correct_milk}>
                 {inputs["milk"]} 
             </div>
             <RecipeChoices
@@ -114,7 +144,7 @@ const BaristaForm = () => {
 
         <div>
             <h3>Blended</h3>
-            <div className="answer-space" >
+            <div className="answer-space" id={correct_blended}>
                 {inputs["blended"]} 
             </div>
             <RecipeChoices
